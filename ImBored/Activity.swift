@@ -24,6 +24,8 @@ struct Activity: Codable, Identifiable {
         accessibility = 0.2
         price = 100
     }
+    
+    //Static needed var/func
     static let activityTypes = ["Any", "education", "recreational", "social", "diy", "charity", "cooking", "relaxation", "music", "busywork"]
     static func getActivities(type: String, count: Int) async throws -> [Activity] {
         var activities = [Activity]()

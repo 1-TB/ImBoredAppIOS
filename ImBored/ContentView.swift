@@ -10,6 +10,7 @@ import DeckKit
 import SwiftData
 
 struct ContentView: View {
+    //Variables
     @State private var activities = [Activity]()
     @State private var selectedType = "Any"
     @State private var numActivities = 5
@@ -17,6 +18,7 @@ struct ContentView: View {
     @State private var showSavedView = false
     @StateObject
     var animation = DeckShuffleAnimation()
+    //shuffle button
     var shuffleButton: some View {
         Button("Pick Random") {
             animation.shuffle($deck, times: 5)
@@ -39,7 +41,7 @@ struct ContentView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.foreground)
                     .padding(.top, 40)
-                
+            //Selectors under Title
                 HStack {
                     Picker("Activity Type", selection: $selectedType) {
                         ForEach(Activity.activityTypes, id: \.self) {
@@ -59,6 +61,7 @@ struct ContentView: View {
                 .background(Color(red: 0.12, green: 0.19, blue: 0.24))
                 .cornerRadius(10)
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
+                //The deck/card View
                 DeckView(
                     $deck,
                     config: .init(
@@ -69,7 +72,7 @@ struct ContentView: View {
                     shuffleAnimation: animation,
                     itemView: actViewCard
                 )
-                
+                //Buttons under the Deck
                 HStack{
                     Button("Get Activities") {
                         Task {
@@ -103,6 +106,7 @@ struct ContentView: View {
             .sheet(isPresented: $showSavedView) {
                 SavedView()
             }
+            //On load, get something to display from the api
             .onAppear(){
                 Task {
                     do {
@@ -122,21 +126,6 @@ func actViewCard(for act: ActivityDeck) -> some View {
     ActivityCardContent(
         item: act.activity
     )
-}
-
-
-struct DifficultyMeter: View {
-    let value: Double
-    
-    var body: some View {
-        HStack(spacing: 4) {
-            ForEach(0..<5) { index in
-                Circle()
-                    .fill(index < Int(value * 5) ? Color(red: 0, green: 0.6, blue: 0.86) : Color.gray)
-                    .frame(width: 12, height: 12)
-            }
-        }
-    }
 }
 
 #Preview {
