@@ -12,24 +12,26 @@ struct ActivityCardContent: View {
     private let item: Activity
     private let isShuffling: Bool
     private let inSheet: Bool
+    @State private var saved: Bool = false
     @EnvironmentObject private var saveManager: SaveManager
     
     var body: some View {
         VStack(spacing: 30) {
-            
+            //Title
+            Text("")
             Text(item.activity)
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.black)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.top)
-                .padding(.top)
-            
+            //Details
             VStack {
                 Text("Type: \(item.type)")
                 Text("Participants: \(String(format: "%.0f", item.participants))")
                 Text("Price: $\(String(format: "%.02f", item.price))")
                 HStack {
+                    // How easy the activity is
                     Text("Difficulty:")
                     DifficultyMeter(value: item.accessibility)
                 }
@@ -40,7 +42,7 @@ struct ActivityCardContent: View {
             Spacer()
             
             Divider()
-            
+            //instructions
             Text("Swipe left or right for new activities")
                 .font(.footnote)
                 .fixedSize(horizontal: false, vertical: true)
@@ -54,9 +56,34 @@ struct ActivityCardContent: View {
                 .stroke(.blue, lineWidth: 1)
         )
         .overlay(alignment: .topLeading) {
-            Button("Save") {
+            Button(action: {
                 print("Save button tapped " + item.activity)
-                saveManager.addActivity(item)
+                if(saved){
+                    //remove the save
+                    saveManager.savedActivities.removeAll(where: { $0.id == item.id })
+                }else{
+                    saveManager.addActivity(item)
+                   
+                }
+                saved.toggle()
+            }) {
+                if saved {
+                    // heart filled in red
+                    Image(systemName: "heart.fill")
+                        .foregroundColor(.red)
+                        .font(.system(size: 20))
+                        .padding(10)
+                        .background(Color(red: 0, green: 0.6, blue: 0.86))
+                        .cornerRadius(10)
+                       
+                } else {
+                    Image(systemName: "heart")
+                        .foregroundColor(.white)
+                        .font(.system(size: 20))
+                        .padding(10)
+                        .background(Color(red: 0, green: 0.6, blue: 0.86))
+                        .cornerRadius(10)
+                }
             }
             .fontWeight(.bold)
             .padding()
@@ -64,7 +91,12 @@ struct ActivityCardContent: View {
             .foregroundColor(.black)
             .padding(.bottom)
         }
+        .onAppear(){
+            //if already saved then set saved to true so we get a red fill
+            saved = saveManager.savedActivities.contains(where: { $0.id == item.id })
+        }
         .rotation3DEffect(
+            //for the shuffle effect
             isShuffling ? .degrees(180) : .zero, axis: (x: 0, y: 1, z: 0)
         )
         .opacity(isShuffling ? 0.5 : 1)
@@ -75,6 +107,7 @@ struct ActivityCardContent: View {
         self.item = item
         self.isShuffling = isShuffling
         self.inSheet = inSheet
+        
     }
 }
 
@@ -96,4 +129,5 @@ struct DifficultyMeter: View {
 #Preview {
     
     ActivityCardContent(item: Activity())
+        .environmentObject(SaveManager())
 }

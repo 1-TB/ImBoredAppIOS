@@ -15,6 +15,8 @@
 		17B36E812BD6B10D00C544EB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17B36E802BD6B10D00C544EB /* Preview Assets.xcassets */; };
 		17B36E882BD6B14B00C544EB /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B36E872BD6B14B00C544EB /* Activity.swift */; };
 		17B582D52BE27EB30086AC3D /* ActivityDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B582D42BE27EB30086AC3D /* ActivityDetailView.swift */; };
+		17B582DA2BE29EFE0086AC3D /* ActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B582D92BE29EFE0086AC3D /* ActivityViewModel.swift */; };
+		17B582DC2BE29FE10086AC3D /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B582DB2BE29FE10086AC3D /* OnboardingView.swift */; };
 		17F428A92BD95D7600B51BA9 /* DeckKit in Frameworks */ = {isa = PBXBuildFile; productRef = 17F428A82BD95D7600B51BA9 /* DeckKit */; };
 		17F428AB2BD962B400B51BA9 /* ActivityDeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F428AA2BD962B400B51BA9 /* ActivityDeckView.swift */; };
 /* End PBXBuildFile section */
@@ -29,6 +31,8 @@
 		17B36E802BD6B10D00C544EB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		17B36E872BD6B14B00C544EB /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		17B582D42BE27EB30086AC3D /* ActivityDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailView.swift; sourceTree = "<group>"; };
+		17B582D92BE29EFE0086AC3D /* ActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewModel.swift; sourceTree = "<group>"; };
+		17B582DB2BE29FE10086AC3D /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		17F428AA2BD962B400B51BA9 /* ActivityDeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDeckView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				17B582D42BE27EB30086AC3D /* ActivityDetailView.swift */,
+				17B582DB2BE29FE10086AC3D /* OnboardingView.swift */,
 				174E783F2BDFDDA6008F454F /* SavedView.swift */,
 				17F428AA2BD962B400B51BA9 /* ActivityDeckView.swift */,
 				17B36E7B2BD6B10C00C544EB /* ContentView.swift */,
@@ -94,6 +99,7 @@
 		17B582D72BE27F140086AC3D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				17B582D92BE29EFE0086AC3D /* ActivityViewModel.swift */,
 				17B36E872BD6B14B00C544EB /* Activity.swift */,
 			);
 			name = Models;
@@ -187,6 +193,8 @@
 				17F428AB2BD962B400B51BA9 /* ActivityDeckView.swift in Sources */,
 				174E78402BDFDDA6008F454F /* SavedView.swift in Sources */,
 				17B36E882BD6B14B00C544EB /* Activity.swift in Sources */,
+				17B582DC2BE29FE10086AC3D /* OnboardingView.swift in Sources */,
+				17B582DA2BE29EFE0086AC3D /* ActivityViewModel.swift in Sources */,
 				17B36E7C2BD6B10C00C544EB /* ContentView.swift in Sources */,
 				174E78422BDFDFF7008F454F /* SaveManager.swift in Sources */,
 				17B36E7A2BD6B10C00C544EB /* ImBoredApp.swift in Sources */,

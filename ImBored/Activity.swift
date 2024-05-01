@@ -16,7 +16,7 @@ struct Activity: Codable, Identifiable {
         return key
     }
     init() {
-        activity = "Go to the Store"
+        activity = "Go to the Store and go shopping."
         type = "Busywork"
         link = ""
         key = ""
@@ -27,10 +27,13 @@ struct Activity: Codable, Identifiable {
     
     //Static needed var/func
     static let activityTypes = ["Any", "education", "recreational", "social", "diy", "charity", "cooking", "relaxation", "music", "busywork"]
-    static func getActivities(type: String, count: Int) async throws -> [Activity] {
+    static func getActivities(type: String, count: Int, completion: @escaping (Result<[Activity], Error>) -> Void) {
         var activities = [Activity]()
+        let dispatchGroup = DispatchGroup()
         
         for _ in 0..<count {
+            dispatchGroup.enter()
+            
             let apiURL: URL
             if type == "Any" {
                 apiURL = URL(string: "https://www.boredapi.com/api/activity")!
@@ -41,17 +44,33 @@ struct Activity: Codable, Identifiable {
             var request = URLRequest(url: apiURL)
             request.httpMethod = "GET"
             
-            let (data, _) = try await URLSession.shared.data(for: request)
-            
-            do {
-                let activity = try JSONDecoder().decode(Activity.self, from: data)
-                activities.append(activity)
-            } catch {
-                throw APIError.decodingFailed
-            }
+            URLSession.shared.dataTask(with: request) { data, _, error in
+                if let error = error {
+                    completion(.failure(error))
+                    dispatchGroup.leave()
+                    return
+                }
+                
+                guard let data = data else {
+                    completion(.failure(APIError.emptyInput))
+                    dispatchGroup.leave()
+                    return
+                }
+                
+                do {
+                    let activity = try JSONDecoder().decode(Activity.self, from: data)
+                    activities.append(activity)
+                    dispatchGroup.leave()
+                } catch {
+                    completion(.failure(APIError.decodingFailed))
+                    dispatchGroup.leave()
+                }
+            }.resume()
         }
         
-        return activities
+        dispatchGroup.notify(queue: .main) {
+            completion(.success(activities))
+        }
     }
     
     enum APIError: Error {

@@ -10,18 +10,19 @@ import DeckKit
 import SwiftData
 
 struct ContentView: View {
-    //Variables
-    @State private var activities = [Activity]()
+    // Variables
     @State private var selectedType = "Any"
     @State private var numActivities = 5
-    @State private var deck = [ActivityDeck]()
     @State private var showSavedView = false
-    @StateObject
-    var animation = DeckShuffleAnimation()
-    //shuffle button
+    @StateObject var animation = DeckShuffleAnimation()
+    @StateObject private var activityViewModel = ActivityViewModel()
+    @State private var isLoading = false
+    @State private var showOnboarding = false
+    
+    // Shuffle button
     var shuffleButton: some View {
         Button("Pick Random") {
-            animation.shuffle($deck, times: 5)
+            animation.shuffle($activityViewModel.activityDeck, times: 5)
         }
         .padding()
         .background(Color(red: 0, green: 0.6, blue: 0.86))
@@ -41,7 +42,8 @@ struct ContentView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.foreground)
                     .padding(.top, 40)
-            //Selectors under Title
+                
+                // Selectors under Title
                 HStack {
                     Picker("Activity Type", selection: $selectedType) {
                         ForEach(Activity.activityTypes, id: \.self) {
@@ -61,35 +63,38 @@ struct ContentView: View {
                 .background(Color(red: 0.12, green: 0.19, blue: 0.24))
                 .cornerRadius(10)
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
-                //The deck/card View
-                DeckView(
-                    $deck,
-                    config: .init(
-                        direction: .down,
-                        itemDisplayCount: 5
-                    ),
-                    
-                    shuffleAnimation: animation,
-                    itemView: actViewCard
-                )
-                //Buttons under the Deck
-                HStack{
+                
+                // The deck/card View
+                if activityViewModel.activities.isEmpty {
+                    VStack {
+                        Text("No activities found.")
+                            .font(.custom("Avenir Next", size: 18))
+                            .foregroundColor(.foreground)
+                    }
+                } else {
+                    DeckView(
+                        $activityViewModel.activityDeck,
+                        config: .init(
+                            direction: .down,
+                            itemDisplayCount: 5
+                        ),
+                        shuffleAnimation: animation,
+                        itemView: actViewCard
+                    )
+                    .redacted(reason: isLoading ? .placeholder : [])
+                }
+                
+                // Buttons under the Deck
+                HStack {
+                    shuffleButton
                     Button("Get Activities") {
-                        Task {
-                            do {
-                                activities = try await Activity.getActivities(type: selectedType, count: numActivities)
-                                deck = activities.map { ActivityDeck(activity: $0) }
-                            } catch {
-                                print(error)
-                            }
-                        }
+                        fetchActivities()
                     }
                     .padding()
                     .background(Color(red: 0, green: 0.6, blue: 0.86))
                     .foregroundColor(.white)
                     .font(.custom("Avenir Next", size: 18))
                     .cornerRadius(10)
-                    shuffleButton
                     Button(action: {
                         showSavedView = true
                     }) {
@@ -100,36 +105,41 @@ struct ContentView: View {
                             .background(Color(red: 0, green: 0.6, blue: 0.86))
                             .cornerRadius(10)
                     }
+                    
                 }
-                
             }
             .sheet(isPresented: $showSavedView) {
                 SavedView()
             }
-            //On load, get something to display from the api
-            .onAppear(){
-                Task {
-                    do {
-                        activities = try await Activity.getActivities(type: selectedType, count: numActivities)
-                        deck = activities.map { ActivityDeck(activity: $0) }
-                    } catch {
-                        print(error)
-                    }
+            .sheet(isPresented: $showOnboarding) {
+                OnboardingView(showOnboarding: $showOnboarding)
+            }
+            .onAppear {
+                if !UserDefaults.standard.bool(forKey: "didShowOnboarding") {
+                    showOnboarding = true
+                    UserDefaults.standard.set(true, forKey: "didShowOnboarding")
                 }
+                fetchActivities()
             }
         }
-        
+    }
+    
+    private func fetchActivities() {
+        isLoading = true
+        activityViewModel.fetchActivities(type: selectedType, count: numActivities) { success in
+            isLoading = false
+            if !success {
+                // Show error message
+            }
+        }
     }
 }
 
 func actViewCard(for act: ActivityDeck) -> some View {
-    ActivityCardContent(
-        item: act.activity
-    )
+    ActivityCardContent(item: act.activity)
 }
 
 #Preview {
     ContentView()
         .environmentObject(SaveManager())
-    
 }

@@ -10,14 +10,20 @@ import SwiftUI
 
 struct ActivityDetailView: View {
     let activity: Activity
+    @State private var showShareSheet = false
     
     var body: some View {
         ZStack {
-            Color(red: 0.1, green: 0.17, blue: 0.22)
+            Color(.background)
                 .edgesIgnoringSafeArea(.all)
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
+                    if !activity.link.isEmpty {
+                        Link("Learn More", destination: URL(string: activity.link)!)
+                            .font(.custom("Avenir Next", size: 20))
+                            .foregroundColor(.blue)
+                    }
                     Text(activity.activity)
                         .font(.custom("Avenir Next", size: 28))
                         .fontWeight(.bold)
@@ -42,9 +48,33 @@ struct ActivityDetailView: View {
                         
                         DifficultyMeter(value: activity.accessibility)
                     }
+                    Button(action: {
+                        showShareSheet = true
+                    }) {
+                        Text("Share")
+                            .font(.custom("Avenir Next", size: 20))
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color(red: 0, green: 0.6, blue: 0.86))
+                            .cornerRadius(10)
+                    }
                 }
+            
                 .padding()
             }
+        }.sheet(isPresented: $showShareSheet) {
+            ActivityShareSheet(activity: activity)
         }
     }
+}
+struct ActivityShareSheet: UIViewControllerRepresentable {
+    let activity: Activity
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let activityItems: [Any] = [activity.activity]
+        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
