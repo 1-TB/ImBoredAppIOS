@@ -36,8 +36,10 @@ struct Activity: Codable, Identifiable {
             
             let apiURL: URL
             if type == "Any" {
+                //apiURL = URL(string: "https://ji2me90qk5.execute-api.us-east-2.amazonaws.com/Test/activity")!
                 apiURL = URL(string: "https://www.boredapi.com/api/activity")!
             } else {
+                //apiURL = URL(string: "https://ji2me90qk5.execute-api.us-east-2.amazonaws.com/Test/activity/type/\(type)")!
                 apiURL = URL(string: "https://www.boredapi.com/api/activity?type=\(type)")!
             }
             

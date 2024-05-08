@@ -17,6 +17,7 @@
 		17B582D52BE27EB30086AC3D /* ActivityDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B582D42BE27EB30086AC3D /* ActivityDetailView.swift */; };
 		17B582DA2BE29EFE0086AC3D /* ActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B582D92BE29EFE0086AC3D /* ActivityViewModel.swift */; };
 		17B582DC2BE29FE10086AC3D /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B582DB2BE29FE10086AC3D /* OnboardingView.swift */; };
+		17C880EA2BEBBB8600E0AA9A /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 17C880E92BEBBB8600E0AA9A /* Lottie */; };
 		17F428A92BD95D7600B51BA9 /* DeckKit in Frameworks */ = {isa = PBXBuildFile; productRef = 17F428A82BD95D7600B51BA9 /* DeckKit */; };
 		17F428AB2BD962B400B51BA9 /* ActivityDeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F428AA2BD962B400B51BA9 /* ActivityDeckView.swift */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				17F428A92BD95D7600B51BA9 /* DeckKit in Frameworks */,
+				17C880EA2BEBBB8600E0AA9A /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +134,7 @@
 			name = ImBored;
 			packageProductDependencies = (
 				17F428A82BD95D7600B51BA9 /* DeckKit */,
+				17C880E92BEBBB8600E0AA9A /* Lottie */,
 			);
 			productName = ImBored;
 			productReference = 17B36E762BD6B10C00C544EB /* ImBored.app */;
@@ -163,6 +166,7 @@
 			mainGroup = 17B36E6D2BD6B10C00C544EB;
 			packageReferences = (
 				17F428A72BD95D7600B51BA9 /* XCRemoteSwiftPackageReference "DeckKit" */,
+				17C880E82BEBBB8600E0AA9A /* XCRemoteSwiftPackageReference "lottie-spm" */,
 			);
 			productRefGroup = 17B36E772BD6B10C00C544EB /* Products */;
 			projectDirPath = "";
@@ -406,6 +410,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		17C880E82BEBBB8600E0AA9A /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.4.3;
+			};
+		};
 		17F428A72BD95D7600B51BA9 /* XCRemoteSwiftPackageReference "DeckKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielsaidi/DeckKit.git";
@@ -417,6 +429,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		17C880E92BEBBB8600E0AA9A /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 17C880E82BEBBB8600E0AA9A /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
 		17F428A82BD95D7600B51BA9 /* DeckKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 17F428A72BD95D7600B51BA9 /* XCRemoteSwiftPackageReference "DeckKit" */;

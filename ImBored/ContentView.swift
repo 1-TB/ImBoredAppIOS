@@ -8,6 +8,7 @@
 import SwiftUI
 import DeckKit
 import SwiftData
+import Lottie
 
 struct ContentView: View {
     // Variables
@@ -18,25 +19,30 @@ struct ContentView: View {
     @StateObject private var activityViewModel = ActivityViewModel()
     @State private var isLoading = false
     @State private var showOnboarding = false
+    let loadingUrl = URL(string: "https://lottie.host/02fffee0-268c-4d4f-b758-9ed82725e2bc/vEvDyp5GwG.json")!
+    
     
     // Shuffle button
     var shuffleButton: some View {
         Button("Pick Random") {
             animation.shuffle($activityViewModel.activityDeck, times: 5)
+           
         }
         .padding()
         .background(Color(red: 0, green: 0.6, blue: 0.86))
         .foregroundStyle(Color.foreground)
         .font(.custom("Avenir Next", size: 18))
         .cornerRadius(10)
+        
     }
     
     var body: some View {
         ZStack {
             Color.background
                 .edgesIgnoringSafeArea(.all)
-            
+           
             VStack {
+            
                 Text("I'm Bored!")
                     .font(.custom("Avenir Next", size: 36))
                     .fontWeight(.bold)
@@ -82,6 +88,18 @@ struct ContentView: View {
                         itemView: actViewCard
                     )
                     .redacted(reason: isLoading ? .placeholder : [])
+                    .overlay(){
+                        if(isLoading){
+                            LottieView {
+                              try await LottieAnimation.loadedFrom(url: loadingUrl )
+                            }
+                            .playing(loopMode: .loop)
+                            .scaleEffect(CGSize(width: 0.4, height: 0.4))
+                            
+                        }
+                    }
+                    
+                   
                 }
                 
                 // Buttons under the Deck
@@ -108,6 +126,7 @@ struct ContentView: View {
                     
                 }
             }
+            
             .sheet(isPresented: $showSavedView) {
                 SavedView()
             }
@@ -126,6 +145,7 @@ struct ContentView: View {
     
     private func fetchActivities() {
         isLoading = true
+       
         activityViewModel.fetchActivities(type: selectedType, count: numActivities) { success in
             isLoading = false
             if !success {
